@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="docs\readme.md" Pack="True" PackagePath="\" />
+		<None Include="docs\README.md" Pack="True" PackagePath="\" />
 		<None Include="..\Resources\EvilRabbit.png" Pack="True" PackagePath="\" />
 		<None Include="docs\LICENSE.md" Pack="True" PackagePath="\" />
 	</ItemGroup>
