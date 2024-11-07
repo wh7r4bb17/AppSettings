@@ -4,7 +4,7 @@ wh7r4bb17.AppSettings is a Helper class to read and save application Settings fr
 The Settings Manger can Set the Values as strings and get the Values as string, bool, int, double, long an byte.
 
 
-The class is provided in .NET Standard 2.0 and .NET Framework 4.8 / 4.8.1.
+The class is provided in .NET Framework 4.8 / 4.8.1, .NET 8.0 and .NET Standard 2.0.
 
 
 ## License
