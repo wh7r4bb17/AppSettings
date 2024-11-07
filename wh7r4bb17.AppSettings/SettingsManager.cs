@@ -6,29 +6,41 @@ namespace wh7r4bb17.AppSettings
     {
     public class SettingsManager
         {
-        #region Properties
-
+        #region Fields
         private readonly string _filePath;
         private string _xmlRootName;
         private readonly Dictionary<string, Dictionary<string, string>> _settings;
 
-        #endregion Properties
+        #endregion Fields
 
         #region Constructor
-
         /// <summary>
         /// create a new instance of the SettingsManager.
         /// </summary>
-        /// <param name="filePath">Full path of the xml document. If it does not exist, it will be created when saving</param>
-        public SettingsManager(string filePath)
+        /// <param name="FullFilePath">Full path of the xml document. If it does not exist, it will be created while saving</param>
+        public SettingsManager(string FullFilePath)
             {
-            _filePath = filePath;
+            _filePath = FullFilePath;
             _settings = new Dictionary<string, Dictionary<string, string>>();
-            LoadSettings();
+            _loadSettings();
             }
+
         #endregion Constructor
 
-        #region Getter
+        #region Methods
+
+        /// <summary>
+        /// Sets a Setting to a Settings Group
+        /// </summary>
+        /// <param name="groupName">The name of the Settings Group. Also the Name of the xml Subnode name</param>
+        /// <param name="key">The Setting Name</param>
+        /// <param name="value">The Value to set</param>
+        public void Set(string groupName, string key, object value)
+            {
+            string valueStr = value.ToString();
+            _setValue(groupName, key, valueStr);
+            }
+
 
         /// <summary>
         /// Returns the string Value of the specified group
@@ -39,7 +51,7 @@ namespace wh7r4bb17.AppSettings
         /// <returns></returns>
         public string Get(string groupName, string key, string defaultValue = "")
             {
-            return GetValue(groupName, key, defaultValue);
+            return _getValue(groupName, key, defaultValue);
             }
 
 
@@ -52,7 +64,7 @@ namespace wh7r4bb17.AppSettings
         /// <returns></returns>
         public bool GetBool(string groupName, string key, bool defaultValue = false)
             {
-            string stringValue = GetValue(groupName, key);
+            string stringValue = _getValue(groupName, key);
 
             if (bool.TryParse(stringValue, out bool boolValue))
                 {
@@ -71,7 +83,7 @@ namespace wh7r4bb17.AppSettings
         /// <returns></returns>
         public int GetInteger(string groupName, string key, int defaultValue = 0)
             {
-            string stringValue = GetValue(groupName, key);
+            string stringValue = _getValue(groupName, key);
 
             if (int.TryParse(stringValue, out int intValue))
                 {
@@ -90,7 +102,7 @@ namespace wh7r4bb17.AppSettings
         /// <returns></returns>
         public double GetDouble(string groupName, string key, double defaultValue = 0.0)
             {
-            string stringValue = GetValue(groupName, key);
+            string stringValue = _getValue(groupName, key);
 
             if (double.TryParse(stringValue, out double doubleValue))
                 {
@@ -109,7 +121,7 @@ namespace wh7r4bb17.AppSettings
         /// <returns></returns>
         public long GetLong(string groupName, string key, long defaultValue = 0)
             {
-            string stringValue = GetValue(groupName, key);
+            string stringValue = _getValue(groupName, key);
 
             if (long.TryParse(stringValue, out long longValue))
                 {
@@ -128,7 +140,7 @@ namespace wh7r4bb17.AppSettings
         /// <returns></returns>
         public byte GetByte(string groupName, string key, byte defaultValue = 0)
             {
-            string stringValue = GetValue(groupName, key);
+            string stringValue = _getValue(groupName, key);
 
             if (byte.TryParse(stringValue, out byte byteValue))
                 {
@@ -137,22 +149,6 @@ namespace wh7r4bb17.AppSettings
             return defaultValue;
             }
 
-        #endregion Getter
-
-        #region Setter
-
-        /// <summary>
-        /// Sets a Setting to a Settings Group
-        /// </summary>
-        /// <param name="groupName">The name of the Settings Group. Also the Name of the xml Subnode name</param>
-        /// <param name="key">The Setting Name</param>
-        /// <param name="value">The Value to set</param>
-        public void Set(string groupName, string key, object value)
-            {
-            string valueStr = value.ToString();
-            SetValue(groupName, key, valueStr);
-            }
-        #endregion Setter
 
         /// <summary>
         ///  Save the Settings to Xml document. If the xml not exist, it will be created.
@@ -189,8 +185,10 @@ namespace wh7r4bb17.AppSettings
             XmlDoc.Save(_filePath);
             }
 
+        #endregion Methods
+
         #region private Methods
-        void LoadSettings()
+        void _loadSettings()
             {
             if (File.Exists(_filePath))
                 {
@@ -213,7 +211,7 @@ namespace wh7r4bb17.AppSettings
                 }
             }
 
-        string GetValue(string groupName, string key, string defaultValue = "")
+        string _getValue(string groupName, string key, string defaultValue = "")
             {
             if (_settings.TryGetValue(groupName, out Dictionary<string, string> group))
                 {
@@ -225,7 +223,7 @@ namespace wh7r4bb17.AppSettings
             return defaultValue;
             }
 
-        void SetValue(string groupName, string key, string value)
+        void _setValue(string groupName, string key, string value)
             {
             if (!_settings.ContainsKey(groupName))
                 {
