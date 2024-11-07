@@ -5,13 +5,13 @@ namespace wh7r4bb17.AppSettings.Test
     {
     public class Tests
         {
-        SettingsManager manager;
-        bool res;
+        SettingsManager _manager;
+        bool _res;
 
         [SetUp]
         public void Setup()
             {
-            res = false;
+            _res = false;
             if (!Directory.Exists("C:\\temp"))
                 {
                 Directory.CreateDirectory("C:\\temp");
@@ -24,11 +24,11 @@ namespace wh7r4bb17.AppSettings.Test
             string filename = "C:\\temp\\Test_Settings.xml";
             try
                 {
-                manager = new SettingsManager(filename);
-                res = true;
+                _manager = new SettingsManager(filename);
+                _res = true;
                 }
             catch { }
-            Assert.IsTrue(res);
+            Assert.IsTrue(_res);
             }
 
         [Test]
@@ -36,57 +36,57 @@ namespace wh7r4bb17.AppSettings.Test
             {
             try
                 {
-                manager.Set("General", "TestInteger", 2147483647);
-                manager.Set("General", "TestDouble", 12345.5);
-                manager.Set("General", "TestLong", 9223372036854775807);
-                manager.Set("General", "TestBool", true);
-                manager.Set("General", "TestByte", 255);
-                manager.Set("General", "TestString", "Hello, World!");
-                res = true;
+                _manager.Set("General", "TestInteger", 2147483647);
+                _manager.Set("General", "TestDouble", 12345.5);
+                _manager.Set("General", "TestLong", 9223372036854775807);
+                _manager.Set("General", "TestBool", true);
+                _manager.Set("General", "TestByte", 255);
+                _manager.Set("General", "TestString", "Hello, World!");
+                _res = true;
                 }
             catch { }
-            Assert.IsTrue(res);
+            Assert.IsTrue(_res);
             }
 
         [Test]
         public void Test3_GetBool()
             {
-            bool boolValue = manager.GetBool("General", "TestBool");
+            bool boolValue = _manager.GetBool("General", "TestBool");
             Assert.AreEqual(boolValue, true);
             }
 
         [Test]
         public void Test4_GetInteger()
             {
-            int intValue = manager.GetInteger("General", "TestInteger");
+            int intValue = _manager.GetInteger("General", "TestInteger");
             Assert.AreEqual(intValue, 2147483647);
             }
 
         [Test]
         public void Test5_GetDouble()
             {
-            double doubleValue = manager.GetDouble("General", "TestDouble");
+            double doubleValue = _manager.GetDouble("General", "TestDouble");
             Assert.AreEqual(doubleValue, 12345.5);
             }
 
         [Test]
         public void Test6_GetLong()
             {
-            long longValue = manager.GetLong("General", "TestLong");
+            long longValue = _manager.GetLong("General", "TestLong");
             Assert.AreEqual(longValue, 9223372036854775807);
             }
 
         [Test]
         public void Test7_GetByte()
             {
-            byte byteValue = manager.GetByte("General", "TestByte");
+            byte byteValue = _manager.GetByte("General", "TestByte");
             Assert.AreEqual(byteValue, 255);
             }
 
         [Test]
         public void Test8_GetString()
             {
-            string stringValue = manager.Get("General", "TestString", "");
+            string stringValue = _manager.Get("General", "TestString", "");
             Assert.AreEqual(stringValue, "Hello, World!");
             }
 
@@ -95,11 +95,11 @@ namespace wh7r4bb17.AppSettings.Test
             {
             try
                 {
-                manager.SaveSettings();
-                res = true;
+                _manager.SaveSettings();
+                _res = true;
                 }
             catch { }
-            Assert.IsTrue(res);
+            Assert.IsTrue(_res);
             }
         }
     }
