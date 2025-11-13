@@ -1,0 +1,46 @@
+name: Pack NuGet
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-pack:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore wh7r4bb17.AppSettings/wh7r4bb17.AppSettings.csproj
+
+      - name: Build Project
+        run: dotnet build wh7r4bb17.AppSettings/wh7r4bb17.AppSettings.csproj --configuration Release --no-restore
+
+      - name: Create NuGet Package
+        run: dotnet pack wh7r4bb17.AppSettings/wh7r4bb17.AppSettings.csproj --configuration Release --no-build --output nupkgs
+
+      - name: Upload NuGet Package as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: nupkgs/
+
+      - name: Publish to NuGet.org
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          $packagePath = Get-ChildItem -Path nupkgs -Filter "wh7r4bb17.AppSettings*.nupkg" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+          if ($packagePath) {
+              dotnet nuget push $packagePath.FullName --api-key "$env:NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          } else {
+              Write-Error "No package found matching wh7r4bb17.AppSettings*.nupkg"
+          }
