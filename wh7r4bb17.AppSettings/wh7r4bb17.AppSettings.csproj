@@ -36,7 +36,7 @@
 		<None Include="docs\LICENSE.md" Pack="True" PackagePath="\" />
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release' AND Exists('$(Sign)\SignFiles.exe')">
 		<Exec Command="echo Sign Output File: '$(TargetDir)$(TargetFileName)'..." />
 		<Exec Command="&quot;$(Sign)\SignFiles.exe&quot; &quot;$(TargetDir)$(TargetFileName)&quot; $(Cert)" />
 	</Target>
